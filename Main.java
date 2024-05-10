@@ -15,9 +15,19 @@ public class Main {
             
         System.out.println("Enter the upper limit: ");
         int limit = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline character
 
-        System.out.println("Enter the number of threads: ");
-        int threadCount = scanner.nextInt();
+        int threadCount = 1; // Default to 1 thread if user doesn't specify
+        try {
+            System.out.println("Enter the number of threads (leave blank for default 1): ");
+            String threadInput = scanner.nextLine(); // Use nextLine() instead of next()
+            if (!threadInput.isEmpty()) {
+                threadCount = Integer.parseInt(threadInput);
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid input for number of threads. Using default value of 1.");
+        }
+
         scanner.close();
 
         // Create a Lock object for mutual exclusion
