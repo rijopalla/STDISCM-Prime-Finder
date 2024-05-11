@@ -42,7 +42,8 @@ public class Main {
         // Submit tasks to the executor
         for (int i = 0; i < threadCount; i++) {
             final int start = i * limit / threadCount + 1;
-            final int end = (i == threadCount - 1)? limit : start + limit / threadCount - 1;
+            // Calculate the end value more accurately to avoid overlaps or gaps
+            final int end = (i == threadCount - 1)? limit : (i + 1) * limit / threadCount;
             futures.add(executor.submit(new PrimeFinder(start, end, lock, primes)));
         }
 
@@ -62,6 +63,12 @@ public class Main {
         System.out.printf("Time taken: %.6f seconds\n", seconds);
 
         System.out.printf("%d primes were found.\n", primes.size());
+
+        //for printing primes:
+        // System.out.println("Prime numbers found: \n");
+        // for (Integer prime: primes){
+        //     System.out.println(prime);
+        // }
     }    
 
     static class PrimeFinder implements Callable<Void> {
@@ -94,6 +101,9 @@ public class Main {
     }
 
     public static boolean check_prime(int n) {
+        if (n == 1) { //check if n = 1
+            return false; 
+        }
         for (int i = 2; i * i <= n; i++) {
             if (n % i == 0) {
                 return false;
